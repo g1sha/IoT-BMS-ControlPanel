@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Building Management System - Control Panel</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+    <!-- Favicon icon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <!-- waves.css -->
+    <link rel="stylesheet" href="assets/pages/waves/css/waves.min.css" type="text/css" media="all">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap/css/bootstrap.min.css">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="assets/icon/icofont/css/icofont.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="assets/icon/font-awesome/css/font-awesome.min.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/jquery.mCustomScrollbar.css">
+</head>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyBlsa0xyTbEDaDVrXSa6kkj8qCaiKEs0IE",
+      authDomain: "iot-bms.firebaseapp.com",
+      databaseURL: "https://iot-bms-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "iot-bms",
+      storageBucket: "iot-bms.appspot.com",
+      messagingSenderId: "110571314507",
+      appId: "1:110571314507:web:529e3ea33c2f51792d1cce"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+<body>
+
+    <div class="pcoded-inner-content">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- Page-body start -->
+                <div class="page-body button-page">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-header-left">
+                                        <h4>Building Management System</h4>
+                                        <h5>Control Panel</h5>
+                                    </div>
+                                    <div class="card-header-right">
+                                        <ul class="list-unstyled card-option">
+                                            <li><i class="fa fa fa-wrench open-card-option"></i></li>
+                                            <li><i class="fa fa-window-maximize full-card"></i></li>
+                                            <li><i class="fa fa-minus minimize-card"></i></li>
+                                            <li><i class="fa fa-refresh reload-card"></i></li>
+                                            <li><i class="fa fa-trash close-card"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <script>
+                                        firebase.database().ref('firebaseData/firebaseData/-MbsGK3Wb62BtHxNZr2y').on('value', (snapshot)=>{
+                                            //console.log(snapshot.val())
+                                            //$('element').attr('some attribute','some attributes value')
+                                            console.log(snapshot.child('korisnikAutorizovan').val())
+                                            $("#userAuth").html(snapshot.child('korisnikAutorizovan').val())
+
+                                            console.log(snapshot.child('otvorenavrata').val())
+                                            if(snapshot.child('otvorenavrata').val()==0){
+                                                $("#vrataLock").html('Vrata zakljucana');
+                                                $("#vrataLock").removeClass();
+                                                $("#vrataLock").addClass("btn waves-effect waves-light btn-danger");
+                                            }else{
+                                                $("#vrataLock").html("Vrata otkljucana")
+                                                $("#vrataLock").removeClass();
+                                                $("#vrataLock").addClass("btn waves-effect waves-light btn-success");
+                                            }
+
+
+                                            console.log(snapshot.child('senzorGasValue').val())
+                                            if(snapshot.child('senzorGasValue').val()>200){
+                                                $("#senzorGas").removeClass()
+                                                $("#senzorGas").addClass("btn waves-effect waves-light btn-danger")
+                                            }else{
+                                                $("#senzorGas").removeClass()
+                                                $("#senzorGas").addClass("btn waves-effect waves-light btn-success")
+                                            }
+                                            $("#senzorGas").html(snapshot.child('senzorGasValue').val())
+
+                                            console.log(snapshot.child('senzorMovementValue').val())
+                                            if(snapshot.child('senzorGasValue').val().includes("Nema kretanja !")){
+                                                $("#senzorMove").removeClass()
+                                                $("#senzorMove").addClass("btn waves-effect waves-light btn-success btn-outline-success")
+                                            }else{
+                                                $("#senzorMove").removeClass()
+                                                $("#senzorMove").addClass("btn waves-effect waves-light btn-danger btn-outline-danger")
+                                            }
+                                            $("#senzorMove").html(snapshot.child('senzorMovementValue').val())
+
+                                            console.log(snapshot.child('zadnjiPrijavljenKorisnik').val())
+                                            if(snapshot.child('korisnikAutorizovan').val()==0){
+                                                $("#userLast").removeClass()
+                                                $("#userLast").addClass("btn waves-effect waves-light btn-danger")
+                                            }else{
+                                                $("#userLast").removeClass()
+                                                $("#userLast").addClass("btn waves-effect waves-light btn-success")
+                                            }
+                                            $("#userLast").html(snapshot.child('zadnjiPrijavljenKorisnik').val())
+                                        })
+                                    </script>
+                                    <button id="senzorGas" class="btn waves-effect waves-light"><i
+                                            class="icofont icofont-eye-alt"></i>Danger Button</button>
+                                    <button id="userLast"class="btn waves-effect waves-light"><i
+                                            class="icofont icofont-check-circled"></i>Success Button</button>
+                                    <button id="senzorMove" class="btn waves-effect waves-light btn-success btn-outline-success"><i
+                                            class="icofont icofont-check-circled"></i>Success Button</button>
+                                    <button id="vrataLock"class="btn waves-effect waves-light"><i
+                                        class="icofont icofont-check-circled"></i>Success Button</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- Warning Section Ends -->
+    <!-- Required Jquery -->
+    <script type="text/javascript" src="assets/js/jquery/jquery.min.js "></script>
+    <script type="text/javascript" src="assets/js/jquery-ui/jquery-ui.min.js "></script>
+    <script type="text/javascript" src="assets/js/popper.js/popper.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap/js/bootstrap.min.js "></script>
+    <!-- waves js -->
+    <script src="assets/pages/waves/js/waves.min.js"></script>
+    <!-- jquery slimscroll js -->
+    <script type="text/javascript" src="assets/js/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- Custom js -->
+    <script src="assets/js/pcoded.min.js"></script>
+    <script src="assets/js/vertical/vertical-layout.min.js"></script>
+    <script src="assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <!-- Custom js -->
+    <!-- <script>
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover({
+                html: true,
+                content: function () {
+                    return $('#primary-popover-content').html();
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="assets/js/script.js"></script> -->
+</body>
+
+</html>
